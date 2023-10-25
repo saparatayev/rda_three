@@ -7,6 +7,7 @@ defmodule RdaThree.Accounts.Account do
   schema "accounts" do
     field :email, :string
     field :hash_password, :string
+    has_one :user, RdaThree.Users.User
 
     timestamps()
   end
