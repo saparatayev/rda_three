@@ -8,5 +8,6 @@ defmodule RdaThreeWeb.Router do
   scope "/api", RdaThreeWeb do
     pipe_through :api
     get "/", DefaultController, :index
+    post "/accounts/create", AccountController, :create
   end
 end
