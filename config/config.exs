@@ -26,6 +26,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :rda_three, RdaThreeWeb.Auth.Guardian,
+  issuer: "rda_three",
+  secret_key: "NUhFN03EkU2KVRhcbUbK1+8fHjd+/ztEoGiaXdUf+aHE7Iblw3PwKDnky6C8JmAH"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
