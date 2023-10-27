@@ -35,7 +35,7 @@ defmodule RdaThree.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_account!(id), do: Repo.get!(Account, id)
+  def get_account!(id), do: Repo.get!(Account, id) |> Repo.preload(:user)
 
   @doc """
   Gets a single account.any()
@@ -46,7 +46,7 @@ defmodule RdaThree.Accounts do
 
       iex> get_account_by_email("test@mail.com")
       %Account{}
-      
+
       iex> get_account_by_email("no_account@mail.com")
       nil
   """
