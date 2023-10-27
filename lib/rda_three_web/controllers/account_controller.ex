@@ -26,6 +26,7 @@ defmodule RdaThreeWeb.AccountController do
     case Guardian.authenticate(email, hash_password) do
       {:ok, account, token} ->
         conn
+        |> Plug.Conn.put_session(:account_id, account.id)
         |> put_status(:ok)
         |> render(:account_token, %{account: account, token: token})
 
@@ -34,8 +35,9 @@ defmodule RdaThreeWeb.AccountController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    account = id |> Accounts.get_account!() |> Repo.preload(:user)
+  def show(conn, _params) do
+    # account = id |> Accounts.get_account!() |> Repo.preload(:user)
+    account = Repo.preload(conn.assigns.account, :user)
 
     case account.user do
       nil ->

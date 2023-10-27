@@ -12,10 +12,12 @@ defmodule RdaThreeWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
   end
 
   pipeline :auth do
     plug RdaThreeWeb.Auth.Pipeline
+    plug RdaThreeWeb.Auth.SetAccount
   end
 
   scope "/api", RdaThreeWeb do
@@ -27,6 +29,6 @@ defmodule RdaThreeWeb.Router do
 
   scope "/api", RdaThreeWeb do
     pipe_through [:api, :auth]
-    get "/accounts/by_id/:id", AccountController, :show
+    get "/accounts/me", AccountController, :show
   end
 end
