@@ -3,6 +3,7 @@ defmodule RdaThreeWeb.AccountController do
 
   alias RdaThreeWeb.{Auth.Guardian, Auth.ErrorResponse}
   alias RdaThree.{Accounts, Accounts.Account, Users, Users.User}
+  alias RdaThree.Repo
 
   action_fallback RdaThreeWeb.FallbackController
 
@@ -34,8 +35,15 @@ defmodule RdaThreeWeb.AccountController do
   end
 
   def show(conn, %{"id" => id}) do
-    account = Accounts.get_account!(id)
-    render(conn, :show, account: account)
+    account = id |> Accounts.get_account!() |> Repo.preload(:user)
+
+    case account.user do
+      nil ->
+        render(conn, :show, account: account, user: %User{})
+
+      user ->
+        render(conn, :show, account: account, user: Users.get_user!(user.id))
+    end
   end
 
   def update(conn, %{"id" => id, "account" => account_params}) do

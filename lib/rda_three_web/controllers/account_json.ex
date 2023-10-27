@@ -11,8 +11,14 @@ defmodule RdaThreeWeb.AccountJSON do
   @doc """
   Renders a single account.
   """
-  def show(%{account: account}) do
-    %{data: data(account)}
+  def show(%{account: account, user: user}) do
+    %{
+      id: account.id,
+      email: account.email,
+      biography: user.biography,
+      full_name: user.full_name,
+      gender: user.gender
+    }
   end
 
   defp data(%Account{} = account) do
