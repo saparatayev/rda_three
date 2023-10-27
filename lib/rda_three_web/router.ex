@@ -1,5 +1,6 @@
 defmodule RdaThreeWeb.Router do
   use RdaThreeWeb, :router
+  use Plug.ErrorHandler
 
   defp handle_errors(conn, %{reason: %Phoenix.Router.NoRouteError{message: message}}) do
     conn |> json(%{errors: message}) |> halt()
