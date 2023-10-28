@@ -1,5 +1,6 @@
 defmodule RdaThreeWeb.AccountJSON do
   alias RdaThree.Accounts.Account
+  alias RdaThree.Users.User
 
   @doc """
   Renders a list of accounts.
@@ -11,14 +12,26 @@ defmodule RdaThreeWeb.AccountJSON do
   @doc """
   Renders a single account.
   """
-  def show(%{account: account, user: user}) do
-    %{
-      id: account.id,
-      email: account.email,
-      biography: user.biography,
-      full_name: user.full_name,
-      gender: user.gender
-    }
+  def show(%{account: account}) do
+    if account.user do
+      %{
+        id: account.id,
+        email: account.email,
+        biography: account.user.biography,
+        full_name: account.user.full_name,
+        gender: account.user.gender
+      }
+    else
+      user = %User{}
+
+      %{
+        id: account.id,
+        email: account.email,
+        biography: user.biography,
+        full_name: user.full_name,
+        gender: user.gender
+      }
+    end
   end
 
   defp data(%Account{} = account) do

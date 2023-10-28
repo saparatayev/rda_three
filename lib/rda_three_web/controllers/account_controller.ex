@@ -4,7 +4,20 @@ defmodule RdaThreeWeb.AccountController do
   alias RdaThreeWeb.{Auth.Guardian, Auth.ErrorResponse}
   alias RdaThree.{Accounts, Accounts.Account, Users, Users.User}
 
+  plug :is_authorized_account when action in [:update, :delete]
+
   action_fallback RdaThreeWeb.FallbackController
+
+  defp is_authorized_account(conn, _opts) do
+    %{params: %{"account" => params}} = conn
+    account = Accounts.get_account!(params["id"])
+
+    if conn.assigns.account.id == account.id do
+      conn
+    else
+      raise ErrorResponse.Forbidden
+    end
+  end
 
   def index(conn, _params) do
     accounts = Accounts.list_accounts()
@@ -36,18 +49,11 @@ defmodule RdaThreeWeb.AccountController do
 
   def show(conn, _params) do
     account = conn.assigns.account
-
-    case account.user do
-      nil ->
-        render(conn, :show, account: account, user: %User{})
-
-      user ->
-        render(conn, :show, account: account, user: Users.get_user!(user.id))
-    end
+    render(conn, :show, account: account)
   end
 
-  def update(conn, %{"id" => id, "account" => account_params}) do
-    account = Accounts.get_account!(id)
+  def update(conn, %{"account" => account_params}) do
+    account = Accounts.get_account!(account_params["id"])
 
     with {:ok, %Account{} = account} <- Accounts.update_account(account, account_params) do
       render(conn, :show, account: account)
