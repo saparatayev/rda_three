@@ -47,8 +47,8 @@ defmodule RdaThreeWeb.AccountController do
     end
   end
 
-  def show(conn, _params) do
-    account = conn.assigns.account
+  def show(conn, %{"id" => id}) do
+    account = Accounts.get_account!(id)
     render(conn, :show, account: account)
   end
 
