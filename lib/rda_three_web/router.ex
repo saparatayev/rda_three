@@ -32,5 +32,6 @@ defmodule RdaThreeWeb.Router do
     get "/accounts/by_id/:id", AccountController, :show
     post "/accounts/update", AccountController, :update
     get "/accounts/sign_out", AccountController, :sign_out
+    post "/accounts/refresh_session", AccountController, :refresh_session
   end
 end
