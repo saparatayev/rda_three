@@ -1,6 +1,7 @@
 defmodule RdaThreeWeb.AccountJSON do
   alias RdaThree.Accounts.Account
   alias RdaThree.Users.User
+  alias RdaThreeWeb.UserJSON
 
   @doc """
   Renders a list of accounts.
@@ -30,6 +31,22 @@ defmodule RdaThreeWeb.AccountJSON do
         biography: user.biography,
         full_name: user.full_name,
         gender: user.gender
+      }
+    end
+  end
+
+  def full_account(%{account: account}) do
+    if account.user do
+      %{
+        id: account.id,
+        email: account.email,
+        user: UserJSON.show(%{user: account.user})
+      }
+    else
+      %{
+        id: account.id,
+        email: account.email,
+        user: UserJSON.show(%{user: %User{}})
       }
     end
   end
