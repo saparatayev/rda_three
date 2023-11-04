@@ -25,6 +25,7 @@ defmodule RdaThreeWeb.AccountController do
   def refresh_session(conn, %{}) do
     token = Guardian.Plug.current_token(conn)
     {:ok, account, new_token} = Guardian.authenticate(token)
+
     conn
     |> Plug.Conn.put_session(:account_id, account.id)
     |> put_status(:ok)
@@ -59,16 +60,20 @@ defmodule RdaThreeWeb.AccountController do
     |> render(:account_token, %{account: account, token: nil})
   end
 
-  def show(conn, %{"id" => id}) do
-    account = Accounts.get_full_account(id)
-    render(conn, :full_account, account: account)
+  def me(conn, %{}) do
+    conn
+    |> put_status(:ok)
+    |> render(:full_account, account: conn.assigns.account)
   end
 
-  def update(conn, %{"account" => account_params}) do
-    # account = Accounts.get_account!(account_params["id"])
+  def update(conn, %{"current_hash" => current_hash, "account" => account_params}) do
+    case Guardian.validate_password(current_hash, conn.assigns.account.hash_password) do
+      true ->
+        {:ok, account} = Accounts.update_account(conn.assigns.account, account_params)
+        render(conn, :show, account: account)
 
-    with {:ok, %Account{} = account} <- Accounts.update_account(conn.assigns.account, account_params) do
-      render(conn, :show, account: account)
+      false ->
+        raise ErrorResponse.Unauthorized, message: "Current Password incorrectt."
     end
   end
 

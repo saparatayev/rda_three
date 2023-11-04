@@ -29,7 +29,7 @@ defmodule RdaThreeWeb.Router do
 
   scope "/api", RdaThreeWeb do
     pipe_through [:api, :auth]
-    get "/accounts/by_id/:id", AccountController, :show
+    get "/accounts/me", AccountController, :me
     post "/accounts/update", AccountController, :update
     get "/accounts/sign_out", AccountController, :sign_out
     post "/accounts/refresh_session", AccountController, :refresh_session
