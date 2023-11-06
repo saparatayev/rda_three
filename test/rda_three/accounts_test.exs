@@ -39,4 +39,16 @@ defmodule RdaThree.AccountsTest do
       assert {:error, %Changeset{valid?: false}} = Accounts.create_account(missing_params)
     end
   end
+
+  describe "get_account/1" do
+    test "success: it returns an account when given a valid UUID" do
+      existing_account = Factory.insert(:account)
+      assert returned_account = Accounts.get_account!(existing_account.id)
+      assert returned_account == existing_account
+    end
+
+    test "error: raises a Ecto.NoResultsError when an account doesn't exist" do
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_account!(Ecto.UUID.autogenerate()) end
+    end
+  end
 end
