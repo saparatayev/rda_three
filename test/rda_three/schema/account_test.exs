@@ -1,7 +1,6 @@
 defmodule RdaThree.Schema.AccountTest do
-  use ExUnit.Case
+  use RdaThree.Support.SchemaCase
   alias RdaThree.Accounts.Account
-  alias Ecto.Changeset
 
   @expected_fields_with_types [
     {:id, :binary_id},
@@ -27,13 +26,7 @@ defmodule RdaThree.Schema.AccountTest do
 
   describe "changeset/2" do
     test "success: returns valid changeset when given valid arguments" do
-      valid_params = %{
-        "id" => Ecto.UUID.generate(),
-        "email" => "test@mail.com",
-        "hash_password" => "test password",
-        "inserted_at" => NaiveDateTime.local_now(),
-        "updated_at" => NaiveDateTime.local_now()
-      }
+      valid_params = valid_params(@expected_fields_with_types)
 
       changeset = Account.changeset(%Account{}, valid_params)
 
@@ -54,13 +47,7 @@ defmodule RdaThree.Schema.AccountTest do
     end
 
     test "error: returns an error changeset when given un-castable values" do
-      invalid_params = %{
-        "id" => NaiveDateTime.local_now(),
-        "email" => NaiveDateTime.local_now(),
-        "hash_password" => NaiveDateTime.local_now(),
-        "inserted_at" => "lets put a string here",
-        "updated_at" => "lets put a string here--- bla bla bla"
-      }
+      invalid_params = invalid_params(@expected_fields_with_types)
 
       assert %Changeset{valid?: false, errors: errors} =
                Account.changeset(%Account{}, invalid_params)

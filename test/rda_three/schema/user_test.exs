@@ -1,6 +1,5 @@
 defmodule RdaThree.Schema.UserTest do
-  use ExUnit.Case
-  alias Ecto.Changeset
+  use RdaThree.Support.SchemaCase
   alias RdaThree.Users.User
 
   @expected_fields_with_types [
@@ -29,15 +28,7 @@ defmodule RdaThree.Schema.UserTest do
 
   describe "changeset/2" do
     test "success: returns valid changeset when given valid arguments" do
-      valid_params = %{
-        "id" => Ecto.UUID.generate(),
-        "biography" => "some bio",
-        "full_name" => "Alan Smith",
-        "gender" => "male",
-        "account_id" => Ecto.UUID.generate(),
-        "inserted_at" => NaiveDateTime.local_now(),
-        "updated_at" => NaiveDateTime.local_now()
-      }
+      valid_params = valid_params(@expected_fields_with_types)
 
       changeset = User.changeset(%User{}, valid_params)
 
@@ -53,15 +44,7 @@ defmodule RdaThree.Schema.UserTest do
     end
 
     test "error: returns an error changeset when given un-castable values" do
-      invalid_params = %{
-        "id" => NaiveDateTime.local_now(),
-        "biography" => NaiveDateTime.local_now(),
-        "full_name" => NaiveDateTime.local_now(),
-        "gender" => NaiveDateTime.local_now(),
-        "account_id" => NaiveDateTime.local_now(),
-        "inserted_at" => "soms stying",
-        "updated_at" => "soms stying sewcf"
-      }
+      invalid_params = invalid_params(@expected_fields_with_types)
 
       assert %Changeset{valid?: false, errors: errors} =
                User.changeset(%User{}, invalid_params)
