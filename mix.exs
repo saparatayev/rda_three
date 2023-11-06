@@ -44,7 +44,8 @@ defmodule RdaThree.MixProject do
       {:guardian, "~> 2.3"},
       {:bcrypt_elixir, "~> 3.0"},
       {:guardian_db, "~> 2.1"},
-      {:faker, "~> 0.17.0", only: :test}
+      {:faker, "~> 0.17.0", only: :test},
+      {:ex_machina, "~> 2.7.0", only: :test}
     ]
   end
 
