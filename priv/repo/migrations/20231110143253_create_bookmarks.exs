@@ -5,8 +5,8 @@ defmodule RdaThree.Repo.Migrations.CreateBookmarks do
     create table(:bookmarks, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :title, :string
-      add :link_id, references(:links, on_delete: :nothing, type: :binary_id)
-      add :account_id, references(:accounts, on_delete: :nothing, type: :binary_id)
+      add :link_id, references(:links, on_delete: :delete_all, type: :binary_id)
+      add :account_id, references(:accounts, on_delete: :delete_all, type: :binary_id)
 
       timestamps()
     end
